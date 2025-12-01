@@ -44,6 +44,12 @@ class Pile(InterfacePile):
         self._visibleCards: List[InterfaceCard] = []
         self._discardPile: List[InterfaceCard] = []
 
+        self._fill_visible_cards()
+
+
+    #private
+
+    def _fill_visible_cards(self) ->None:
         #fill visible cards with random cards
         for _ in range(4):
             # This calls the implemented _getRandomCard
@@ -51,16 +57,16 @@ class Pile(InterfacePile):
             if card:
                  self._visibleCards.append(card)
 
-
-    #private
-        
     def _getRandomCard(self) -> Optional[InterfaceCard]:
         #if deck is empty
-        if not self._hiddenCards:
-            self._restoreDiscardPile
+        if len(self._hiddenCards)==0:
+            self._restoreDiscardPile()
+            #it already shuffled all cards, no need to do anything more
+            return
 
         # choose next card from _hiddenCards, pops it from list and returns it
         card = self._hiddenCards.pop()
+
         self._discardPile.append(card)
 
         return card
@@ -71,6 +77,9 @@ class Pile(InterfacePile):
         self._hiddenCards = self.shuffler.shuffle(self._hiddenCards)
 
         self._discardPile.clear()
+        self._visibleCards.clear()
+
+        self._fill_visible_cards()
 
 
 

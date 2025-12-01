@@ -63,9 +63,9 @@ class TestPile(unittest.TestCase):
         self.shufflerSetSeet = Shuffle(1)
 
 
-        numCards = 20
+        self.numCards = 20
 
-        for i in range(numCards):
+        for i in range(self.numCards):
             card = CardFake(i)
             self.allCards.append(card)
 
@@ -112,4 +112,48 @@ class TestPile(unittest.TestCase):
 
         self.assertEqual(target, current)
 
-    
+    def test_discard_n_cards(self) -> None:
+        pile = Pile(self.allCards,self.shufflerSetSeet)
+        n = 10
+
+        target = [3, 4, 18, 2]
+        current = []
+
+        for _ in range(n):
+            pile.removeLastCard()
+
+        hidden = len(pile._hiddenCards)
+        discarded = len(pile._discardPile)
+        visible = len(pile._visibleCards)
+
+
+
+        for i in range(1,5):
+            current.append(int(pile.getCard(i).state()))
+
+        self.assertEqual(4, visible)
+        self.assertEqual(self.numCards-n, discarded - visible)
+        self.assertEqual(self.numCards-n-visible, hidden)
+        self.assertEqual(self.numCards, hidden + discarded)
+
+    def test_cycle_deck(self) -> None:
+        pile = Pile(self.allCards,self.shufflerSetSeet)
+
+        target = [0, 13, 14, 8]
+        current = []
+
+        for _ in range(17):
+            pile.removeLastCard()
+
+        hidden = len(pile._hiddenCards)
+        discarded = len(pile._discardPile)
+        visible = len(pile._visibleCards)
+                
+
+
+        for i in range(1,5):
+            current.append(int(pile.getCard(i).state()))
+
+
+        self.assertEqual(4, visible)
+        self.assertEqual(target, current)
