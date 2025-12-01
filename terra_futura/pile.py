@@ -1,31 +1,65 @@
 from terra_futura.interfaces import InterfacePile, InterfaceCard
-from typing import Optional, List
+from typing import Optional, List, Protocol
 import random
+import time
+
+class InterfaceShuffle(Protocol):
+    # is necessary for testing randomness
+    def shuffle(self, inputDeck: List[InterfaceCard]) -> List[InterfaceCard]:
+        ...
+
+class Shuffle(InterfaceShuffle):
+
+    def __init__(self, seed: Optional[int]):
+        # if there's a seed, set it
+        if seed:
+            self.randomGenerator  = random.Random(seed)
+        else: # set seed to current time
+            self.randomGenerator = random.Random(time.time())
+
+    def shuffle(self, inputDeck: List[InterfaceCard]) -> List[InterfaceCard]:
+        new = inputDeck.copy()
+
+        self.randomGenerator.shuffle(new)
+
+        return new
+
 
 class Pile(InterfacePile):
-    def __init__(self, allCards: List[InterfaceCard]) -> None:
-        pass
+    def __init__(self, allCards: List[InterfaceCard], shuffler: Optional[InterfaceShuffle]) -> None:
+        self._hiddenCards: List[InterfaceCard]
 
-        self._hiddenCards: List[InterfaceCard] = allCards
+        # If there's a shuffler, shuffle according to it
+        if shuffler:
+            self._hiddenCards = shuffler.shuffle(allCards)    
+        else:
+            newShuffler = Shuffle()
+            self._hiddenCards = newShuffler.shuffle(allCards)
+
         self._visibleCards: List[InterfaceCard] = []
 
         #fill visible cards with random cards
         for _ in range(4):
-            # This calls the implemented getRandomCard
-            card = self.getRandomCard()
+            # This calls the implemented _getRandomCard
+            card = self._getRandomCard()
             if card:
                  self._visibleCards.append(card)
+
+
+    #private
         
-    def getRandomCard(self) -> Optional[InterfaceCard]:
+    def _getRandomCard(self) -> Optional[InterfaceCard]:
         #if deck is empty
         if not self._hiddenCards:
             return None
 
-        # choose random card from _hiddenCards, pops it from list and returns it
-        index = random.randrange(len(self._hiddenCards))
-        card = self._hiddenCards.pop(index)
+        # choose next card from _hiddenCards, pops it from list and returns it
+        card = self._hiddenCards.pop()
 
         return card
+    
+
+    # public
 
     """Only gives the card information, does not change anything"""
     def getCard(self, index:int) ->Optional[InterfaceCard]:
@@ -47,7 +81,7 @@ class Pile(InterfacePile):
         self._visibleCards.pop(-1)
 
         # get card
-        card = self.getRandomCard()
+        card = self._getRandomCard()
 
         # If ther's a card
         if card:
