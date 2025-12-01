@@ -42,7 +42,7 @@ class Pile(InterfacePile):
         self._hiddenCards = self.shuffler.shuffle(allCards)    
             
         self._visibleCards: List[InterfaceCard] = []
-        self._discardPile: List[InterfaceCard]
+        self._discardPile: List[InterfaceCard] = []
 
         #fill visible cards with random cards
         for _ in range(4):
@@ -88,6 +88,12 @@ class Pile(InterfacePile):
     def takeCard(self, index: int) -> None:
         if index>=1 and index <=4:
             self._visibleCards.pop(index-1)
+
+            card = self._getRandomCard()
+
+            if card:
+                self._visibleCards.insert(0,card)
+
 
 
 
