@@ -35,9 +35,10 @@ class Pile(InterfacePile):
         
         return self._visibleCards[index-1]
 
-    """Removes card from grid."""
+    """Removes card from pile."""
     def takeCard(self, index: int) -> None:
-        ...
+        if index>=1 and index <=4:
+            self._visibleCards.pop(index-1)
 
 
 
@@ -48,11 +49,8 @@ class Pile(InterfacePile):
         # get card
         card = self.getRandomCard()
 
-
-        
         # If ther's a card
         if card:
-            
             # inserts new card 
             self._visibleCards.insert(0,card)
         
