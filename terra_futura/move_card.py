@@ -8,7 +8,8 @@ class MoveCard(InterfaceMoveCard):
     def __init__(self) -> None:
         pass
 
-    def moveCard(self, pile: InterfacePile,cardIndex: int, gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
+    def moveCard(self, pile: InterfacePile,cardIndex: int, 
+                 gridCoordinate: GridPosition, grid: InterfaceGrid) ->bool:
         # implementacia 
 
         if not grid.canPutCard(gridCoordinate):
