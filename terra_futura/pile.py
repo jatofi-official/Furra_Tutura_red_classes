@@ -10,7 +10,7 @@ class InterfaceShuffle(Protocol):
 
 class Shuffle(InterfaceShuffle):
 
-    def __init__(self, seed: Optional[int]):
+    def __init__(self, seed: Optional[int]) -> None:
         # if there's a seed, set it
         if seed:
             self.randomGenerator  = random.Random(seed)
@@ -30,13 +30,19 @@ class Pile(InterfacePile):
         self._hiddenCards: List[InterfaceCard]
 
         # If there's a shuffler, shuffle according to it
-        if shuffler:
-            self._hiddenCards = shuffler.shuffle(allCards)    
-        else:
-            newShuffler = Shuffle()
-            self._hiddenCards = newShuffler.shuffle(allCards)
+        self.shuffler: InterfaceShuffle
 
+
+        if shuffler:
+            self.shuffler = shuffler
+        else:
+            newShuffler = Shuffle(None)
+            self.shuffler = newShuffler
+
+        self._hiddenCards = self.shuffler.shuffle(allCards)    
+            
         self._visibleCards: List[InterfaceCard] = []
+        self._discardPile: List[InterfaceCard]
 
         #fill visible cards with random cards
         for _ in range(4):
@@ -51,13 +57,22 @@ class Pile(InterfacePile):
     def _getRandomCard(self) -> Optional[InterfaceCard]:
         #if deck is empty
         if not self._hiddenCards:
-            return None
+            self._restoreDiscardPile
 
         # choose next card from _hiddenCards, pops it from list and returns it
         card = self._hiddenCards.pop()
+        self._discardPile.append(card)
 
         return card
     
+    def _restoreDiscardPile(self) -> None:
+        self._hiddenCards.extend(self._discardPile)
+
+        self._hiddenCards = self.shuffler.shuffle(self._hiddenCards)
+
+        self._discardPile.clear()
+
+
 
     # public
 
