@@ -7,7 +7,6 @@ class Grid (InterfaceGrid):
 
         self.gridSize = 3
 
-        self._activationPattern: List[GridPosition] = []
         self._recentlyActivated: Set[GridPosition] = set()
         self._positions: Dict[GridPosition, InterfaceCard] = {}
 
@@ -66,7 +65,7 @@ class Grid (InterfaceGrid):
         if coordinate in self._recentlyActivated:
             return False
         # if card can be activated return True
-        if coordinate in self._positions.keys() and coordinate in self._activationPattern:
+        if coordinate in self._positions.keys():
             return True
         
         # default case
@@ -84,10 +83,10 @@ class Grid (InterfaceGrid):
         self._recentlyActivated.add(coordinate)
 
     def setActivationPattern(self, pattern: List[GridPosition]) -> None:
-        # Set pattern
-        self._activationPattern = pattern
-        # Clear recently activated cards
-        self.endTurn()
+        # Activate all cards from pattern
+        for position in pattern:
+            self.setActivated(position)
+
         
     def endTurn(self) -> None:
         # Clear recently activated cards
@@ -120,16 +119,6 @@ class Grid (InterfaceGrid):
                     if pos in self._recentlyActivated:
                         # R = Recently Activated (highest priority display)
                         rowStr += " [R] "
-                    
-                    # Check activation pattern
-                    elif pos in self._activationPattern:
-                        # Card in activation pattern
-                        if pos in self._positions:
-                            rowStr += " [A] "
-
-                        # Activation pattern position empty 
-                        else:
-                            rowStr += " (A) "
                     elif pos in self._positions:
                         # Card in position, not in activation pattern
                         rowStr += " [C] "
