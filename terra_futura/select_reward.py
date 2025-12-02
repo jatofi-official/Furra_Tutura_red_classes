@@ -51,4 +51,6 @@ class SelectReward(InterfaceSelectReward):
             self._card.putResources([resource])
 
     def state(self)-> str:
+        if not self._player:
+            return "Reward not set"
         return "Player: " + str(self._player) + "; Resources: " + str(self._selection)
