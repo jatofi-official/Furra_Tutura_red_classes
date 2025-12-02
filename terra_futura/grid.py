@@ -22,7 +22,7 @@ class Grid (InterfaceGrid):
 
     def canPutCard(self, coordinate: GridPosition)-> bool:
         # First card can always be placed
-        if self._positions.keys() == []:
+        if len(self._positions.keys()) == 0:
             return True
         
         # Position occupied
@@ -47,7 +47,7 @@ class Grid (InterfaceGrid):
     
     def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
         # First card has to be in the middle
-        if self._positions.keys() == []:
+        if len(self._positions.keys())==0:
             self._positions[self._startingPosition] = card
             return True
 
@@ -120,7 +120,7 @@ class Grid (InterfaceGrid):
                         # R = Recently Activated (highest priority display)
                         rowStr += " [R] "
                     elif pos in self._positions:
-                        # Card in position, not in activation pattern
+                        # Card in position
                         rowStr += " [C] "
                     else:
                         # Empty position
