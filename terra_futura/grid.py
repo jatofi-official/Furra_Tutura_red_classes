@@ -45,20 +45,18 @@ class Grid (InterfaceGrid):
         
         return True
     
-    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+    def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> None:
         # First card has to be in the middle
         if len(self._positions.keys())==0:
             self._positions[self._startingPosition] = card
-            return True
 
         # If cannot put card return false (final check)
-        if not self.canPutCard(coordinate):
-            return False
+        elif not self.canPutCard(coordinate):
+            raise ValueError("Unable to put card")
         
         # Put card on position
         self._positions[coordinate] = card
 
-        return True
 
     def canBeActivated(self, coordinate: GridPosition)-> bool:
         # if card was recently activated return false
