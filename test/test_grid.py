@@ -113,11 +113,26 @@ class TestGrid(unittest.TestCase):
     def test_activation_pattern(self) ->None:
         grid = Grid()
 
-        card1 = CardFake(1)
-        card2 = CardFake(2)
-        card3 = CardFake(3)
-        card4 = CardFake(4)
+        cards = [CardFake(1), CardFake(2), CardFake(3), CardFake(4), CardFake(5)]
+
+        positions = [GridPosition(0,0), GridPosition(1,1), GridPosition(-1,1), GridPosition(1,-1), GridPosition(-1,-1)]
+        
+        
+        for i in range(len(cards)):
+            grid.putCard(positions[i],cards[i])
+
+        
+        self.assertEqual(" [C]  [ ]  [C] \n [ ]  [C]  [ ] \n [C]  [ ]  [C] ", grid.state())
+
+        # Remove starting position
+        positions.pop(0)
+        
+        grid.setActivationPattern(positions)
+
+        self.assertEqual(" [R]  [ ]  [R] \n [ ]  [C]  [ ] \n [R]  [ ]  [R] ", grid.state())
 
 
-        grid.putCard(GridPosition(0,0),card1)
-        grid.putCard(GridPosition(2,2),card2)
+        # Should be same as first grid.state()
+        grid.endTurn()
+        self.assertEqual(" [C]  [ ]  [C] \n [ ]  [C]  [ ] \n [C]  [ ]  [C] ", grid.state())
+
