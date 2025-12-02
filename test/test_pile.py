@@ -81,7 +81,9 @@ class TestPile(unittest.TestCase):
         current = []
 
         for i in range(1,5):
-            current.append(int(pile.getCard(i).state()))
+            card = pile.getCard(i)
+            if card is not None:
+                current.append(int(card.state()))
 
         self.assertEqual(target, current)
 
@@ -94,7 +96,9 @@ class TestPile(unittest.TestCase):
         pile.removeLastCard()
 
         for i in range(1,5):
-            current.append(int(pile.getCard(i).state()))
+            card = pile.getCard(i)
+            if card is not None:
+                current.append(int(card.state()))
 
         self.assertEqual(target, current)
 
@@ -108,7 +112,9 @@ class TestPile(unittest.TestCase):
         pile.takeCard(3)
 
         for i in range(1,5):
-            current.append(int(pile.getCard(i).state()))
+            card = pile.getCard(i)
+            if card is not None:
+                current.append(int(card.state()))
 
         self.assertEqual(target, current)
 
@@ -129,7 +135,9 @@ class TestPile(unittest.TestCase):
 
 
         for i in range(1,5):
-            current.append(int(pile.getCard(i).state()))
+            card = pile.getCard(i)
+            if card is not None:
+                current.append(int(card.state()))
 
         self.assertEqual(4, visible)
         self.assertEqual(self.numCards-n, discarded - visible)
@@ -150,9 +158,10 @@ class TestPile(unittest.TestCase):
         visible = len(pile._visibleCards)
                 
 
-
         for i in range(1,5):
-            current.append(int(pile.getCard(i).state()))
+            card = pile.getCard(i)
+            if card is not None:
+                current.append(int(card.state()))
 
 
         self.assertEqual(4, visible)

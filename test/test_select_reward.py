@@ -19,7 +19,7 @@ class CardFake(InterfaceCard):
         self.lowerEffect: Optional[Effect] = None
 
         self.can_put_resources_result = can_put
-        self.resources_put = []
+        self.resources_put: List[Resource] = []
 
 
     def canPutResources(self, resources: List[Resource]) -> bool:
@@ -97,7 +97,7 @@ class TestSelectReward(unittest.TestCase):
         selectReward = SelectReward()
         # Should raise error
         with self.assertRaises(ValueError):
-            selectReward.player()
+            selectReward.player
 
     def test_successful_resource_transfer(self) -> None:
         selectReward = SelectReward()

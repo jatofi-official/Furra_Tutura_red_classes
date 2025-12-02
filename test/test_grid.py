@@ -12,7 +12,7 @@ class CardFake(InterfaceCard):
         self.resources: List[Resource] = []
         self.pollutionSpacesL: int = 0
 
-        self.index = index
+        self.index: int = index
 
         # Multiplicity 0..1 — may be None or an Effect instance
         self.upperEffect: Optional[Effect] = None
