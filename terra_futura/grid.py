@@ -11,6 +11,8 @@ class Grid (InterfaceGrid):
         self._recentlyActivated: Set[GridPosition] = set()
         self._positions: Dict[GridPosition, InterfaceCard] = {}
 
+        self._startingPosition = GridPosition(0,0)
+
     
     def getCard(self, coordinate: GridPosition)-> Optional[InterfaceCard]:
         # Return card if exists
@@ -45,6 +47,11 @@ class Grid (InterfaceGrid):
         return True
     
     def putCard(self, coordinate: GridPosition, card: InterfaceCard) -> bool:
+        # First card has to be in the middle
+        if self._positions.keys() == []:
+            self._positions[self._startingPosition] = card
+            return True
+
         # If cannot put card return false (final check)
         if not self.canPutCard(coordinate):
             return False
@@ -71,6 +78,8 @@ class Grid (InterfaceGrid):
         # to change all interfaces so I have to raise an error...
         if not self.canBeActivated(coordinate):
             raise ValueError("Unable to activate on position")
+        
+
         
         self._recentlyActivated.add(coordinate)
 
