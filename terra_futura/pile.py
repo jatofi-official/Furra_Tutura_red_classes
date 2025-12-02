@@ -62,7 +62,7 @@ class Pile(InterfacePile):
         if len(self._hiddenCards)==0:
             self._restoreDiscardPile()
             #it already shuffled all cards, no need to do anything more
-            return
+            return None
 
         # choose next card from _hiddenCards, pops it from list and returns it
         card = self._hiddenCards.pop()
