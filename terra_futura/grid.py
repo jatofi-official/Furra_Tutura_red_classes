@@ -84,9 +84,52 @@ class Grid (InterfaceGrid):
         # Clear recently activated cards
         self._recentlyActivated.clear()
 
-    def state(self) -> str:
-        if not self._positions.keys():
+def state(self) -> str:
+        # If the grid is empty, return message
+        if not self._positions:
             return "Empty grid"
 
+        # Get positions
+        xPos = [position.x for position in self._positions.keys()]
+        yPos = [position.y for position in self._positions.keys()]
 
-        return ""
+        minX = min(xPos)
+        maxX = max(xPos)
+        minY = min(yPos)
+        maxY = max(yPos)
+
+
+        grid_lines = []
+        
+        for x in range(minX, maxX + 1):
+            rowStr = ""
+
+            for y in range(minY, maxY + 1):
+                pos = GridPosition(x=x, y=y)
+                
+                # Position recently activated
+                if pos in self._recentlyActivated:
+                    # R = Recently Activated (highest priority display)
+                    rowStr += " [R] "
+                
+                # Check activation pattern
+                elif pos in self._activationPattern:
+                    # Card in activation pattern
+                    if pos in self._positions:
+                        rowStr += " [A] "
+
+                    # Activation pattern position empty 
+                    else:
+                        rowStr += " (A) "
+                elif pos in self._positions:
+                    # Card in position, not in activation pattern
+                    rowStr += " [C] "
+                else:
+                    # Empty position
+                    rowStr += " [ ] " 
+            
+            # Add the completed row string to the list
+            grid_lines.append(rowStr)
+
+        
+        return "\n".join(grid_lines)
