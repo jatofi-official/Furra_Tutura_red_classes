@@ -71,8 +71,6 @@ class TestGrid(unittest.TestCase):
 
         # Position is not in middle
         grid.putCard(GridPosition(2,2),card)
-
-        print(grid.state())
         
         # Position 0, 0 should be taken
         self.assertFalse(grid.canPutCard(GridPosition(0,0)))
@@ -107,8 +105,10 @@ class TestGrid(unittest.TestCase):
 
         self.assertEqual(""" [C]  [ ]  [ ] \n [ ]  [ ]  [ ] \n [ ]  [ ]  [C] """, grid.state())
         self.assertFalse(grid.canPutCard(GridPosition(0,0)))
-        self.assertEqual(card1.index, grid.getCard(GridPosition(0,0)).index)
-        self.assertNotEqual(card1.index, grid.getCard(GridPosition(2,2)).index)
+
+        self.assertEqual(card1, grid.getCard(GridPosition(0,0)))
+
+        self.assertNotEqual(card1, grid.getCard(GridPosition(2,2)))
     
     def test_activation_pattern(self) ->None:
         grid = Grid()
